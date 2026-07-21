@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cek Kelas Siswa SMP PGRI Ciomas TP 2026/2027</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .app-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 500px; /* Ukuran pas untuk layar HP */
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            padding: 20px 16px;
+            margin: auto 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header .badge-top {
+            display: inline-block;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.4;
+        }
+
+        /* Search Input Box Mobile */
+        .search-box {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-box label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 42px 14px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s ease;
+            background-color: #f8fafc;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #0284c7;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12);
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 12px;
+            background: #e2e8f0;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Result List Mobile Cards */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .student-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease;
+        }
+
+        .student-card:active {
+            transform: scale(0.99);
+        }
+
+        .student-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .info-label {
+            font-size: 0.72rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0284c7;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .status-success {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-warning {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .notice-box {
+            margin-top: 20px;
+            padding: 12px 14px;
+            background-color: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 12px;
+            color: #92400e;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 24px 16px;
+            color: #64748b;
+            font-size: 0.88rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-card">
+        <div class="header">
+            <span class="badge-top">SMP PGRI CIOMAS</span>
+            <h1>CEK KELAS SISWA TP 2026/2027<br><span style="color: #0284c7; font-size: 0.95rem;">Kelas 7 & 8</span></h1>
+        </div>
+
+        <div class="search-box">
+            <label for="namaInput">MASUKAN NAMA LENGKAP:</label>
+            <div class="input-wrapper">
+                <input type="text" id="namaInput" placeholder="Ketik nama siswa disini..." oninput="handleInput()">
+                <button id="clearBtn" class="clear-btn" onclick="clearSearch()">✕</button>
+            </div>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <div class="no-result">Silahkan ketik nama lengkap siswa pada kolom di atas.</div>
+        </div>
+
+        <div class="notice-box">
+            📢 <strong>Informasi:</strong> Jika sudah daftar ulang tapi kelas tidak muncul atau data tidak ditemukan, silahkan konfirmasi kebagian Tata Usaha. Daftar siswa perkelas akan dipasang di sekolah mulai <strong>Rabu, 22 Juli 2026</strong>.
+        </div>
+    </div>
+
+    <script>
+        // Data 235 Siswa Lengkap
+        const dataSiswa = [
+            // Status Silahkan Daftar ulang
+            { nis: "3", nama: "Alivia Nurfatma", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "4", nama: "Anissa Sapitrie", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "5", nama: "Anisa Fitriani", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "5", nama: "Dinda Priyasuri", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "9", nama: "Fadilah Sascha Veyga", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "9", nama: "Hilma Alimatul Azkia", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "12", nama: "Humaira Almuqaffa", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "19", nama: "Muhamad Aditia Hermawan", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "32", nama: "Sabrina Putri Rahmadian", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "34", nama: "Salsabila Kusuma Putri", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "116", nama: "Afiani Nur Fauziah", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "126", nama: "Fairul Zalfa Zakaria", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "130", nama: "Lydia Anggraeni", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "155", nama: "Adam Saputra", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "160", nama: "Apriliya Nur Ghaniyyah", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "166", nama: "Faishal Hafizh", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "173", nama: "Muhamad Akilla Pradana", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "186", nama: "Refvan Febriansyah", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "188", nama: "Rizki Hadiansyah Wijaya", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "193", nama: "TB M Sandy Ardiansyah", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "197", nama: "Ahmad Afrizal", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "218", nama: "Muhamad Revanu Putra Pratama", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "231", nama: "Siti Asyifa Anjani", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+            { nis: "236", nama: "Yusnia Meida Rahayu", kelas: "Cek kelas", ket: "Silahkan Daftar ulang" },
+
+            // Kelas 8A
+            { nis: "1", nama: "Al Reizky Dwi Putra", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "2", nama: "Alfira Rahmawati Supriatna", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "4", nama: "Anggara Saputra", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "6", nama: "Arya Aufar Rizki", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "7", nama: "Cinta Anjani NM", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "8", nama: "Desti Ayudia Sapitri", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "10", nama: "Fitri Noviani Aulia", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "11", nama: "Gian Langit", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "13", nama: "Jelita Madania Kasih", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "14", nama: "Mahesa Al Muzaqi", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "15", nama: "Mesya Meyliana Putri", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "16", nama: "Mohamad Andrean Saputra", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "17", nama: "Muhamad Aksa Ferliawan", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "18", nama: "Muhamad Alfar Sadega", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "19", nama: "Muhamad Arfansyah", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "20", nama: "Muhamad Iksan Setiawan", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "21", nama: "Muhamad Rizki Aditya", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "22", nama: "Muhamad Ruly Setiawan", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "23", nama: "Muhammad Arya Dwi Putra", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "24", nama: "Muhammad Erhan Maulana", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "25", nama: "Muhammad Rehyan", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "26", nama: "Muhammad Saiful Bahri", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "27", nama: "Mutiara Ramadhani", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "28", nama: "Olivia Anissa Putri", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "29", nama: "Oziel Surya Hara", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "30", nama: "Respia Oktora", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "31", nama: "Rifky Sarmadan", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "33", nama: "Siti Ana Tasya", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "34", nama: "Siti Humairah Safitri", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "35", nama: "Syifa Indradi", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "36", nama: "Tasya Aprilia", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "37", nama: "Yola Damayanti", kelas: "8A", ket: "Sudah Daftar Ulang" },
+            { nis: "38", nama: "Zahra Asyfa Yunandita", kelas: "8A", ket: "Sudah Daftar Ulang" },
+
+            // Kelas 8B
+            { nis: "1", nama: "Aisyah Nur Aprilianti", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "2", nama: "Alisya Haurafelly", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "3", nama: "Andhika Syahputra", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "4", nama: "Andi Besse Nurcahaya", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "5", nama: "Arka Maulana", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "6", nama: "Azzahrah Maulatina", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "7", nama: "Bagas Saputra", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "8", nama: "Damar Apriansyah Saputra", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "9", nama: "Dea Amelia Putri", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "10", nama: "Delisha Aprilia", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "11", nama: "Destianti Azka Putri", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "12", nama: "Faris Deandra Rijki", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "13", nama: "Hafsah Nurani", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "14", nama: "Intan Nur Ramadiani", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "15", nama: "Jenice Putri Dwitama", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "16", nama: "Khalvian Zakqi Saepudin", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "17", nama: "M. Dhika Fitran Munajat", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "18", nama: "Meita Anastasya", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "20", nama: "Muhamad Akmaludin", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "21", nama: "Muhamad Bilak Ramadhan", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "22", nama: "Muhamad Farhan Alawi", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "23", nama: "Muhamad Haikal Saputra", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "24", nama: "Muhamad Raihan Muzzaki", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "25", nama: "Muhammad Al Ridho SAM", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "26", nama: "Muhammad Arifin Soleh", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "27", nama: "Muhammad Dzikri Alfatih", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "28", nama: "Muhammad Halwan Syahiri", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "29", nama: "Muhammad Rafa Nugraha", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "30", nama: "Naura Husna Annida", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "31", nama: "Rafka Khairy Benzema", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "32", nama: "Rasyid Alghifari", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "33", nama: "Ratu Syairatasyah Pertiwi", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "35", nama: "Sanaya Aopa Solihah", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "36", nama: "Siti Anisa Hapijatul Husna", kelas: "8B", ket: "Sudah Daftar Ulang" },
+            { nis: "37", nama: "Siti Nur Jihan", kelas: "8B", ket: "Sudah Daftar Ulang" },
+
+            // Kelas 8C
+            { nis: "1", nama: "Alip Muhamad Rohim", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "2", nama: "Andriany Saputri", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "3", nama: "Anisa Andriati", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "6", nama: "Fahri Alfarizki", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "7", nama: "Fharid Febriyansyah", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "8", nama: "Fiha Ainun Tariah", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "10", nama: "Intan Nur Komalasari", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "11", nama: "Lathisya Fatriana", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "12", nama: "Maura Latinsa Saputra", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "13", nama: "Meysa Dwi Anggraeni", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "14", nama: "Moch Ikhsan Al Fatir", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "15", nama: "Muhamad Agam Abdillah Pratama", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "16", nama: "Muhamad Andi Faisal", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "17", nama: "Muhamad Gilang Al Pharizi", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "18", nama: "Muhamad Heiril Adzka", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "19", nama: "Muhamad Rafka Ibrahim", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "20", nama: "Muhamad Rifalliansyah", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "21", nama: "Muhammad Abdul Alifi", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "22", nama: "Muhammad Abidzar Al-Ghifari", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "23", nama: "Muhammad Aska Andriawan Rizki", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "25", nama: "Muhammad Ikbal", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "26", nama: "Muhammad Iqbal Nurhakim", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "27", nama: "Muhammad Riffal", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "28", nama: "Muhammad Rizki Harun Assyafari", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "29", nama: "Muhammad Seno Ibrahim", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "30", nama: "Nur Atifah Fitriyani", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "31", nama: "Nurjuliantika", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "32", nama: "Ramli Mustofa Nur Syaban", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "33", nama: "Rifki Putra Afriansyah", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "34", nama: "Riski Maulana", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "35", nama: "Salsa Klawdia Putri", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "36", nama: "Samuel Zebua", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "37", nama: "Siti Ayira", kelas: "8C", ket: "Sudah Daftar Ulang" },
+            { nis: "38", nama: "Siti Raina Utami", kelas: "8C", ket: "Sudah Daftar Ulang" },
+
+            // Kelas 9A
+            { nis: "114", nama: "Abdul Faiz", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "115", nama: "Aditya Rohiyana Alwahyu", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "117", nama: "Ahmad Muharomi", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "118", nama: "Amelia Rahmawati", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "119", nama: "Aprilia Arya Jazilah", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "120", nama: "Arman Pratama", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "121", nama: "Barry Khairul Azam", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "122", nama: "Damar Restu Abizar", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "123", nama: "Dimas Tri Fatih", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "124", nama: "Diva Chandra Wijaya", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "125", nama: "Dwiki Pratama", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "127", nama: "Ghifari Azka", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "128", nama: "Haeratuk Kartika Putri", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "129", nama: "Lala Putri Bustomi", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "131", nama: "Marsha Nabilah", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "132", nama: "Meri Nasilvana", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "133", nama: "Muhamad Aditia Ayyas Alfatih", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "134", nama: "Muhamad Awaludin Tahir", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "135", nama: "Muhamad Fatan Zafran", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "136", nama: "Muhamad Fatra Ramadhan", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "137", nama: "Muhamad Ihsan Septiansyah", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "138", nama: "Muhamad Nazwa Arya Putra", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "139", nama: "Muhamad Richo Saputra", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "140", nama: "Muhamad Zinedin Zidan", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "141", nama: "Muhammad Diva Ramdani", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "142", nama: "Muhammad Fajri", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "143", nama: "Muhammad Taamir Dzakkiy", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "144", nama: "Nara Kiara", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "145", nama: "Popie Ardhita", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "146", nama: "Raffa Virziawan", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "147", nama: "Rayi Ramadhan Wiryadi", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "148", nama: "Rian Ramadhan", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "149", nama: "Rizqita Humaira", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "150", nama: "Sayidah Napisah", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "151", nama: "Siti Hilma", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "152", nama: "Siti Reva Azizah", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "153", nama: "Syahmita Putri Suwandi", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "154", nama: "Thiara Putri Wahyuni", kelas: "9A", ket: "Sudah Daftar Ulang" },
+            { nis: "207", nama: "Fahmida Ghina zahra", kelas: "9A", ket: "Sudah Daftar Ulang" },
+
+            // Kelas 9B
+            { nis: "156", nama: "Agil Nur Rahman", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "157", nama: "Aira Putri Anggraeni", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "158", nama: "Alden Nathan Raditya", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "159", nama: "Anisa Aulia Zahra", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "161", nama: "Arya Danu Septian", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "162", nama: "Daffa Izzulhaq", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "163", nama: "Denta Komara", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "164", nama: "Djihadan Tirta Usmani", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "165", nama: "Fadil Nur Akmal", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "167", nama: "Fara Aura Nur'Asri Maulana", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "168", nama: "Heriyanto", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "169", nama: "Julia Ramadani", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "170", nama: "Laras Nursyafa Rina", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "171", nama: "M. Raka Adria Laniuar", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "172", nama: "Mauly Wafika Aziza", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "174", nama: "Muhamad Fahmi Firmansyah", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "175", nama: "Muhamad Fikri Haikal", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "176", nama: "Muhamad Indrawan Septya Nugraha", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "177", nama: "Muhamad Nizam Al Fahmi", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "178", nama: "Muhamad Rizky Maulana", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "179", nama: "Muhammad Alif Firmansyah", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "180", nama: "Muhammad Fahri Maulana", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "181", nama: "Muhammad Miftah Mustaqim", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "182", nama: "Nadilia Anggraeni", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "183", nama: "Nur Rahmah", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "184", nama: "Orlando Aulia B.", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "185", nama: "Raesha Zaefani Firmansyah", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "187", nama: "Revina Laraswati", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "189", nama: "Safa Alzena", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "190", nama: "Septiana Safira", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "191", nama: "Siti Latifah", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "192", nama: "Suci Nofiyanti", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "194", nama: "Tsabita Rosyida Darlina Putri", kelas: "9B", ket: "Sudah Daftar Ulang" },
+            { nis: "195", nama: "Wike Ayumi", kelas: "9B", ket: "Sudah Daftar Ulang" },
+
+            // Kelas 9C
+            { nis: "196", nama: "Adrian Khairul Ramadhan", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "198", nama: "Alika Linda Nur Anggraeni", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "199", nama: "Anisa Maulida Putri", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "200", nama: "Arifa Rizqulloh", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "201", nama: "Arya Utama Saputra", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "202", nama: "Damar Bayu Anggito", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "203", nama: "Dewi Sahwana", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "204", nama: "Diandra Rahmadhani", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "205", nama: "Doni Muhammad Fernando", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "206", nama: "Fadlan Al Fathir", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "208", nama: "Farras Zaky Dhaifullas", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "209", nama: "Fazila Estralita Zulkarnain", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "210", nama: "Karisa Sutisna", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "211", nama: "Lucky Apriandi", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "212", nama: "Marissa Zahra Nasution", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "213", nama: "Maulana Fajar", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "214", nama: "Maya Lutfiyana Maharani", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "215", nama: "Muhamad Alvi Priandika", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "216", nama: "Muhamad Firdiansyah Oktavian", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "217", nama: "Muhamad Maulana Yusuf Anwari", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "219", nama: "Muhamad Syahidin", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "220", nama: "Muhammad Bisma", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "221", nama: "Muhammad Faishal", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "222", nama: "Muhammad Raditya Al Fath", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "223", nama: "Nanda Alfahri", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "224", nama: "Nurul Agifha", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "225", nama: "Putra Raditia", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "226", nama: "Rafka Riansyah", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "227", nama: "Rezky Alviansyah", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "228", nama: "Rhegina Cahyani Ahmad", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "229", nama: "Sarah Aulia", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "230", nama: "Sinatria Arya Putra", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "232", nama: "Siti Nazwa Aliya F", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "233", nama: "Taqya", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "234", nama: "Veronika Triana Auamara", kelas: "9C", ket: "Sudah Daftar Ulang" },
+            { nis: "235", nama: "Wahyudi Herdiansyah", kelas: "9C", ket: "Sudah Daftar Ulang" }
+        ];
+
+        function handleInput() {
+            const inputVal = document.getElementById('namaInput').value;
+            const clearBtn = document.getElementById('clearBtn');
+            
+            clearBtn.style.display = inputVal.length > 0 ? 'flex' : 'none';
+            cariSiswa();
+        }
+
+        function clearSearch() {
+            document.getElementById('namaInput').value = '';
+            document.getElementById('clearBtn').style.display = 'none';
+            cariSiswa();
+        }
+
+        function cariSiswa() {
+            const input = document.getElementById('namaInput').value.trim().toLowerCase();
+            const resultContainer = document.getElementById('resultContainer');
+
+            if (input === "") {
+                resultContainer.innerHTML = '<div class="no-result">Silahkan ketik nama lengkap siswa pada kolom di atas.</div>';
+                return;
+            }
+
+            const filteredData = dataSiswa.filter(siswa => 
+                siswa.nama.toLowerCase().includes(input)
+            );
+
+            if (filteredData.length === 0) {
+                resultContainer.innerHTML = '<div class="no-result">⚠️ Data tidak ditemukan.<br>Silahkan cek ejaan nama atau hubungi Tata Usaha.</div>';
+                return;
+            }
+
+            let cardsHtml = "";
+            filteredData.forEach(siswa => {
+                const isDaftarUlang = siswa.ket.toLowerCase().includes("sudah");
+                const badgeClass = isDaftarUlang ? "status-success" : "status-warning";
+
+                cardsHtml += `
+                    <div class="student-card">
+                        <div class="student-name">${siswa.nama}</div>
+                        <div class="student-info">
+                            <div class="info-item">
+                                <span class="info-label">Kelas</span>
+                                <span class="info-value">${siswa.kelas}</span>
+                            </div>
+                            <div class="info-item" style="align-items: flex-end;">
+                                <span class="info-label" style="margin-bottom: 4px;">Status</span>
+                                <span class="status-badge ${badgeClass}">${siswa.ket}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultContainer.innerHTML = cardsHtml;
+        }
+    </script>
+
+</body>
+</html>
